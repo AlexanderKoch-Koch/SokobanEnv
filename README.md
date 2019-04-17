@@ -9,7 +9,7 @@ pip install .
 ```
 
 ## Usage example
-Download Sokoban puzzles from https://github.com/deepmind/boxoban-levels. The path can be set, for example, to <path to cloned repositort>/boxoban-levels/unfiltered/train/.
+Download Sokoban puzzles from https://github.com/deepmind/boxoban-levels. The path can be set, for example, to 'path to cloned repositort'/boxoban-levels/unfiltered/train/.
 
 import sokoban_env and create environment. Set the path 
 ```
