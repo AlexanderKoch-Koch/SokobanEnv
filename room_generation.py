@@ -4,7 +4,7 @@ import numpy as np
 
 class RoomGenerator:
 
-    def __init__(self, folder_path="/home/alex/gym-sokoban/gym_sokoban/envs/boxoban-levels/unfiltered/train/"):
+    def __init__(self, folder_path):
         self.files = sorted(os.listdir(folder_path))
         self.folder_path = folder_path
         print(self.files)

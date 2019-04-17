@@ -2,7 +2,7 @@ from sokoban_env import SokobanEnv
 import random
 import matplotlib.pyplot as plt
 
-env = SokobanEnv()
+env = SokobanEnv("./train/")
 
 
 observation = env.reset()

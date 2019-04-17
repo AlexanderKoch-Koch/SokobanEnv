@@ -4,8 +4,8 @@ from room_generation import RoomGenerator
 
 class SokobanEnv:
 
-    def __init__(self, max_steps=100):
-        self.generator = RoomGenerator()
+    def __init__(self, puzzles_folder, max_steps=100):
+        self.generator = RoomGenerator(puzzles_folder)
         self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         self.room = None
         self.goal_positions = None

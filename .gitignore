@@ -3,3 +3,4 @@ venv
 runs
 .idea
 *.egg-info
+train
