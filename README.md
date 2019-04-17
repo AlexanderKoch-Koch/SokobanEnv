@@ -8,11 +8,13 @@ cd SokobanEnv
 pip install .
 ```
 
-## Usage
-import and initilization
+## Usage example
+Download Sokoban puzzles from https://github.com/deepmind/boxoban-levels. The path can be set, for example, to <<path to cloned repositort>>/boxoban-levels/unfiltered/train/.
+
+import sokoban_env and create environment. Set the path 
 ```
 import sokoban_env
-env = sokoban_env.SokobanEnv()
+env = sokoban_env.SokobanEnv(path_to_puzzle_folder)
 ```
 
 start next level
