@@ -14,5 +14,4 @@ while not done:
     observation, reward, done, _ = env.step(action)
     print(action)
     print(reward)
-    plt.imshow(observation)
-    plt.show()
+    env.render()

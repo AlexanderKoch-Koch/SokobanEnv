@@ -1,6 +1,8 @@
 import numpy as np
 from room_generation import RoomGenerator
-
+import gym
+from gym.envs.classic_control import rendering
+import render_utils
 
 class SokobanEnv:
 
@@ -20,7 +22,9 @@ class SokobanEnv:
         self.reward_box_moved_off_goal = -1.0
         self.reward_solved = 5
 
-    def reset(self):
+        self.viewer = None
+
+    def reset(self, normalized=True):
         """
         resets the environment and starts a new game
         :return: first observation of new game
@@ -29,9 +33,14 @@ class SokobanEnv:
         self.num_finished_boxes = 0
         self.current_step = 0
         self.num_boxes = len(self.goal_positions)
-        return self.room
 
-    def step(self, action):
+        state = self.room
+        if normalized:
+            state = np.subtract(np.divide(self.room, 5), 0.5)
+
+        return state
+
+    def step(self, action, normalized=True):
         """
         executes action n game
         :param action:
@@ -85,4 +94,14 @@ class SokobanEnv:
         if self.current_step >= self.max_steps:
             is_done = True
 
-        return self.room, reward, is_done, None
+        state = self.room
+        if normalized:
+            state = np.subtract(np.divide(self.room, 5), 0.5)
+
+        return state, reward, is_done, None
+
+    def render(self):
+        if self.viewer is None:
+            self.viewer = rendering.SimpleImageViewer()
+        img = render_utils.room_to_rgb(self.room)
+        self.viewer.imshow(img)
