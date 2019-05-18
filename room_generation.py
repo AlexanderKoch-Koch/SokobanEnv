@@ -7,7 +7,6 @@ class RoomGenerator:
     def __init__(self, folder_path):
         self.files = sorted(os.listdir(folder_path))
         self.folder_path = folder_path
-        print(self.files)
         self.dir = folder_path
         self.current_file_index = 0
         self.current_file = open(folder_path + self.files[self.current_file_index], mode="r")

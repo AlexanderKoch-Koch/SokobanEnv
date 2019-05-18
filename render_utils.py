@@ -29,9 +29,10 @@ import marshal
 from scipy import misc
 
 
-def room_to_rgb(room, room_structure=None):
+def room_to_rgb(room, goal_positions, room_structure=None):
     """
     Creates an RGB image of the room.
+    :param goal_positions: boolean array which determines if position is a goal state
     :param room:
     :param room_structure:
     :return:
@@ -77,6 +78,17 @@ def room_to_rgb(room, room_structure=None):
         for j in range(room.shape[1]):
             y_j = j * 16
             surfaces_id = room[i, j]
+
+            # check if box_on_target and box have the correct values
+            if surfaces_id == 3 and goal_positions[i, j] == 0:
+                surfaces_id = 4
+
+            if surfaces_id == 4 and goal_positions[i, j] == 1:
+                surfaces_id = 3
+
+            # check if player on target is correct
+            if surfaces_id == 5 and goal_positions[i, j]:
+                surfaces_id = 6  # player on target
 
             room_rgb[x_i:(x_i + 16), y_j:(y_j + 16), :] = surfaces[surfaces_id]
 

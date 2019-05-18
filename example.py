@@ -11,7 +11,9 @@ done = False
 
 while not done:
     action = int(input())
-    observation, reward, done, _ = env.step(action)
+    observation, reward, done, _ = env.step(action, tiny_observation=False)
+    plt.imshow(observation)
+    plt.show()
     print(action)
     print(reward)
     env.render()

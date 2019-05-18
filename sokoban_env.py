@@ -1,8 +1,14 @@
 import numpy as np
 from room_generation import RoomGenerator
 import gym
-from gym.envs.classic_control import rendering
 import render_utils
+from PIL import Image
+
+try:
+    from gym.envs.classic_control import rendering
+except:
+    pass
+
 
 class SokobanEnv:
 
@@ -20,7 +26,7 @@ class SokobanEnv:
         self.reward_step = -0.1
         self.reward_box_on_goal = 1.0
         self.reward_box_moved_off_goal = -1.0
-        self.reward_solved = 5
+        self.reward_solved = 10
 
         self.viewer = None
 
@@ -40,7 +46,7 @@ class SokobanEnv:
 
         return state
 
-    def step(self, action, normalized=True):
+    def step(self, action, normalized=True, tiny_observation=True):
         """
         executes action n game
         :param action:
@@ -94,14 +100,23 @@ class SokobanEnv:
         if self.current_step >= self.max_steps:
             is_done = True
 
-        state = self.room
-        if normalized:
-            state = np.subtract(np.divide(self.room, 5), 0.5)
+        if tiny_observation:
+            state = self.room
+            if normalized:
+                state = np.subtract(np.divide(self.room, 5), 0.5)
+        else:
+            state = render_utils.room_to_rgb(self.room, goal_positions=self.goal_positions)
+            if normalized:
+                # reduce size from 160x160x3 to 80x80x3
+                state = state[::2, ::2, :]
+                # state = misc.imresize(state, (80, 80), "bicubic")
+                # normalize to [0; 1]
+                state = state / 255
 
         return state, reward, is_done, None
 
     def render(self):
         if self.viewer is None:
             self.viewer = rendering.SimpleImageViewer()
-        img = render_utils.room_to_rgb(self.room)
+        img = render_utils.room_to_rgb(self.room, goal_positions=self.goal_positions)
         self.viewer.imshow(img)
