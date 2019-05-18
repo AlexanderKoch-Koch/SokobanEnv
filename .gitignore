@@ -4,3 +4,5 @@ runs
 .idea
 *.egg-info
 train
+*@*
+

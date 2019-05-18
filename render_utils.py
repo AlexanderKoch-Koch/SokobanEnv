@@ -29,6 +29,75 @@ import marshal
 from scipy import misc
 
 
+class SokobanRender():
+
+    def __init__(self):
+        resource_package = __name__
+        # Load images, representing the corresponding situation
+        box_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box_small.png')))
+        box = misc.imread(box_filename)
+
+        box_on_target_filename = pkg_resources.resource_filename(resource_package,
+                                                                 '/'.join(('surface', 'box_on_target_small.png')))
+        box_on_target = misc.imread(box_on_target_filename)
+
+        box_target_filename = pkg_resources.resource_filename(resource_package,
+                                                              '/'.join(('surface', 'box_target_small.png')))
+        box_target = misc.imread(box_target_filename)
+
+        floor_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'floor_small.png')))
+        floor = misc.imread(floor_filename)
+
+        player_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'player_small.png')))
+        player = misc.imread(player_filename)
+
+        player_on_target_filename = pkg_resources.resource_filename(resource_package,
+                                                                    '/'.join(('surface', 'player_on_target_small.png')))
+        player_on_target = misc.imread(player_on_target_filename)
+
+        wall_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'wall_small.png')))
+        wall = misc.imread(wall_filename)
+
+        self.surfaces = [wall, floor, box_target, box_on_target, box, player, player_on_target]
+
+    def room_to_rgb_small(self, room, goal_positions, room_structure=None):
+        """
+        Creates an RGB image of the room.
+        :param goal_positions: boolean array which determines if position is a goal state
+        :param room:
+        :param room_structure:
+        :return:
+        """
+        room = np.array(room)
+        if not room_structure is None:
+            # Change the ID of a player on a target
+            room[(room == 5) & (room_structure == 2)] = 6
+
+        # Assemble the new rgb_room, with all loaded images
+        room_rgb = np.zeros(shape=(room.shape[0] * 8, room.shape[1] * 8, 3), dtype=np.uint8)
+        for i in range(room.shape[0]):
+            x_i = i * 8
+
+            for j in range(room.shape[1]):
+                y_j = j * 8
+                surfaces_id = room[i, j]
+
+                # check if box_on_target and box have the correct values
+                if surfaces_id == 3 and goal_positions[i, j] == 0:
+                    surfaces_id = 4
+
+                if surfaces_id == 4 and goal_positions[i, j] == 1:
+                    surfaces_id = 3
+
+                # check if player on target is correct
+                if surfaces_id == 5 and goal_positions[i, j]:
+                    surfaces_id = 6  # player on target
+
+                room_rgb[x_i:(x_i + 8), y_j:(y_j + 8), :] = self.surfaces[surfaces_id]
+
+        return room_rgb
+
+
 def room_to_rgb(room, goal_positions, room_structure=None):
     """
     Creates an RGB image of the room.
@@ -93,6 +162,9 @@ def room_to_rgb(room, goal_positions, room_structure=None):
             room_rgb[x_i:(x_i + 16), y_j:(y_j + 16), :] = surfaces[surfaces_id]
 
     return room_rgb
+
+
+
 
 
 def room_to_tiny_world_rgb(room, room_structure=None, scale=1):

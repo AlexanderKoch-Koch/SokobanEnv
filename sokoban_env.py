@@ -12,7 +12,7 @@ except:
 
 class SokobanEnv:
 
-    def __init__(self, puzzles_folder, max_steps=100):
+    def __init__(self, puzzles_folder, max_steps=100, tiny_observation=True):
         self.generator = RoomGenerator(puzzles_folder)
         self.actions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         self.room = None
@@ -27,8 +27,9 @@ class SokobanEnv:
         self.reward_box_on_goal = 1.0
         self.reward_box_moved_off_goal = -1.0
         self.reward_solved = 10
-
+        self.tiny_observation = tiny_observation
         self.viewer = None
+        self.renderer = render_utils.SokobanRender()
 
     def reset(self, normalized=True):
         """
@@ -41,12 +42,22 @@ class SokobanEnv:
         self.num_boxes = len(self.goal_positions)
 
         state = self.room
-        if normalized:
-            state = np.subtract(np.divide(self.room, 5), 0.5)
+        if self.tiny_observation:
+            state = self.room
+            if normalized:
+                state = np.subtract(np.divide(self.room, 5), 0.5)
+        else:
+            state = self.render()
+            if normalized:
+                # reduce size from 160x160x3 to 80x80x3
+                # state = state[::2, ::2, :]
+                # state = misc.imresize(state, (80, 80), "bicubic")
+                # normalize to [0; 1]
+                state = state / 255
 
         return state
 
-    def step(self, action, normalized=True, tiny_observation=True):
+    def step(self, action, normalized=True):
         """
         executes action n game
         :param action:
@@ -100,23 +111,26 @@ class SokobanEnv:
         if self.current_step >= self.max_steps:
             is_done = True
 
-        if tiny_observation:
+        if self.tiny_observation:
             state = self.room
             if normalized:
                 state = np.subtract(np.divide(self.room, 5), 0.5)
         else:
-            state = render_utils.room_to_rgb(self.room, goal_positions=self.goal_positions)
+            state = self.render()
             if normalized:
                 # reduce size from 160x160x3 to 80x80x3
-                state = state[::2, ::2, :]
+                # state = state[::2, ::2, :]
                 # state = misc.imresize(state, (80, 80), "bicubic")
                 # normalize to [0; 1]
                 state = state / 255
 
         return state, reward, is_done, None
 
-    def render(self):
-        if self.viewer is None:
-            self.viewer = rendering.SimpleImageViewer()
-        img = render_utils.room_to_rgb(self.room, goal_positions=self.goal_positions)
-        self.viewer.imshow(img)
+    def render(self, show=False):
+        img = self.renderer.room_to_rgb_small(self.room, goal_positions=self.goal_positions)
+        if show:
+            if self.viewer is None:
+                self.viewer = rendering.SimpleImageViewer()
+            self.viewer.imshow(img)
+
+        return img
