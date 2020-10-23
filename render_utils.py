@@ -26,7 +26,8 @@ import random
 import numpy as np
 import pkg_resources
 import marshal
-from scipy import misc
+import imageio
+
 
 
 class SokobanRender():
@@ -35,28 +36,28 @@ class SokobanRender():
         resource_package = __name__
         # Load images, representing the corresponding situation
         box_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box_small.png')))
-        box = misc.imread(box_filename)
+        box = imageio.imread(box_filename)
 
         box_on_target_filename = pkg_resources.resource_filename(resource_package,
                                                                  '/'.join(('surface', 'box_on_target_small.png')))
-        box_on_target = misc.imread(box_on_target_filename)
+        box_on_target = imageio.imread(box_on_target_filename)
 
         box_target_filename = pkg_resources.resource_filename(resource_package,
                                                               '/'.join(('surface', 'box_target_small.png')))
-        box_target = misc.imread(box_target_filename)
+        box_target = imageio.imread(box_target_filename)
 
         floor_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'floor_small.png')))
-        floor = misc.imread(floor_filename)
+        floor = imageio.imread(floor_filename)
 
         player_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'player_small.png')))
-        player = misc.imread(player_filename)
+        player = imageio.imread(player_filename)
 
         player_on_target_filename = pkg_resources.resource_filename(resource_package,
                                                                     '/'.join(('surface', 'player_on_target_small.png')))
-        player_on_target = misc.imread(player_on_target_filename)
+        player_on_target = imageio.imread(player_on_target_filename)
 
         wall_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'wall_small.png')))
-        wall = misc.imread(wall_filename)
+        wall = imageio.imread(wall_filename)
 
         self.surfaces = [wall, floor, box_target, box_on_target, box, player, player_on_target]
 
