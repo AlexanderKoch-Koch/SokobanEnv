@@ -1,7 +1,7 @@
 import numpy as np
-from room_generation import RoomGenerator
+from sokoban_env.room_generation import RoomGenerator
 import gym
-import render_utils
+import sokoban_env.render_utils as render_utils
 from PIL import Image
 
 try:

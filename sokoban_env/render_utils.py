@@ -36,28 +36,29 @@ class SokobanRender():
         resource_package = __name__
         # Load images, representing the corresponding situation
         box_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box_small.png')))
-        box = imageio.imread(box_filename)
+        box = imageio.imread(box_filename)[:, :, :3]
 
         box_on_target_filename = pkg_resources.resource_filename(resource_package,
                                                                  '/'.join(('surface', 'box_on_target_small.png')))
-        box_on_target = imageio.imread(box_on_target_filename)
+        box_on_target = imageio.imread(box_on_target_filename)[:, :, :3]
 
         box_target_filename = pkg_resources.resource_filename(resource_package,
                                                               '/'.join(('surface', 'box_target_small.png')))
-        box_target = imageio.imread(box_target_filename)
+        box_target = imageio.imread(box_target_filename)[:, :, :3]
 
         floor_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'floor_small.png')))
         floor = imageio.imread(floor_filename)
+        floor = np.zeros((8, 8, 3))
 
         player_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'player_small.png')))
-        player = imageio.imread(player_filename)
+        player = imageio.imread(player_filename)[:, :, :3]
 
         player_on_target_filename = pkg_resources.resource_filename(resource_package,
                                                                     '/'.join(('surface', 'player_on_target_small.png')))
-        player_on_target = imageio.imread(player_on_target_filename)
+        player_on_target = imageio.imread(player_on_target_filename)[:, :, :3]
 
         wall_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'wall_small.png')))
-        wall = imageio.imread(wall_filename)
+        wall = imageio.imread(wall_filename)[:, :, :3]
 
         self.surfaces = [wall, floor, box_target, box_on_target, box, player, player_on_target]
 

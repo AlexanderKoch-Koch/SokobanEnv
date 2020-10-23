@@ -1,8 +1,9 @@
-from sokoban_env import SokobanEnv
-import random
+from sokoban_env.sokoban_env import SokobanEnv
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
-env = SokobanEnv("./train/", tiny_observation=False)
+env = SokobanEnv("../boxoban-levels/medium/train/", tiny_observation=False)
 
 
 observation = env.reset()
@@ -16,4 +17,3 @@ while not done:
     plt.show()
     print(action)
     print(reward)
-    env.render()
